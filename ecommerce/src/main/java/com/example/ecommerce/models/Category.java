@@ -4,35 +4,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long categoryId; 
+    private Long categoryId;
+
+    @NotBlank(message = "Category name is required")
     private String categoryName;
-    
-    // constructor :
-    public Category(String categoryName, Long categoryId){
-        this.categoryName = categoryName;
-        this.categoryId  = categoryId;
-    }
-
-    // setters :
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-    public void setName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    // getters:
-    public Long getCategoryId() {
-        return categoryId;
-    }
-    public String getName() {
-        return categoryName;
-    }
-    
-
 }

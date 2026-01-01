@@ -15,6 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.ecommerce.models.Category;
 import com.example.ecommerce.services.CategoryService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -44,7 +47,7 @@ public class CategoryController {
     }
     // add Category :
     @PostMapping("/admin/addCategory")
-    public ResponseEntity<?> addCategory(@RequestBody Category newCategory){
+    public ResponseEntity<?> addCategory(@Valid @RequestBody Category newCategory){
         return categoryService.addNewCategory(newCategory);
     }
 

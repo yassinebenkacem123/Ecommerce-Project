@@ -1,61 +1,63 @@
 package com.example.ecommerce.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.ecommerce.models.Category;
+import com.example.ecommerce.repository.CategoryRepo;
 
 @Service
 public class CategoryServiceImplt implements CategoryService {
     
-    Long id = 0L;
-    List<Category> categories = new ArrayList<>();
+
+    @Autowired
+    CategoryRepo categoryRepo; 
+
+    // get all categories :
     @Override
     public ResponseEntity<List<Category>> getAllCategories() {
+        List<Category> categories = categoryRepo.findAll();
         return new ResponseEntity<>(categories ,HttpStatus.OK);
     }
 
+    // get category by Id :
     @Override
     public ResponseEntity<Category> getCategoryById(Long categoryId) {
-        Category category = categories.stream()
-        .filter(c -> c.getCategoryId().equals(categoryId))
-        .findFirst()
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category Not Found"));
+        Category category = categoryRepo.findById(categoryId)
+        .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource Not Found"));
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
+    // add new Category :
     @Override
     public ResponseEntity<String> addNewCategory(Category newCategory) {
-        id++;
-        newCategory.setCategoryId(id);
-        categories.add(newCategory);
-        return new ResponseEntity<>("Category added successfly", HttpStatus.OK);
+        categoryRepo.save(newCategory);
+        return new ResponseEntity<>("Category added successfly.", HttpStatus.OK);
     }
 
+    // delete category :
     @Override
     public ResponseEntity<String> deleteCategory(Long categoryId) {
-        Category category = categories.stream()
-        .filter(c -> c.getCategoryId().equals(categoryId))
-        .findFirst()
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category Not Found"));
-        categories.remove(category);
-        return new ResponseEntity<>("Category Deleted successfly...",HttpStatus.OK);
+        Category categoryDeleted = categoryRepo.findById(categoryId)
+        .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"categroy not found"));
+        categoryRepo.delete(categoryDeleted);
+        return new ResponseEntity<>("Category Deleted successfly.",HttpStatus.OK);
     }
 
+    // updating category :
     @Override
     public ResponseEntity<String> updateCategory(Long categoryId, Category category) 
     {
-        Category categoryToUpdate = categories.stream()
-        .filter(c -> c.getCategoryId().equals(categoryId))
-        .findFirst()
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category Not Found"));
-        categoryToUpdate.setName(category.getName());
-        return new ResponseEntity<>("Category updated successfly...", HttpStatus.OK);
+        Category categoryToUpdate = categoryRepo.findById(categoryId)
+        .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Category Not Found"));
+        categoryToUpdate.setCategoryName(category.getCategoryName());
+        categoryRepo.save(categoryToUpdate);
+        return new ResponseEntity<>("Category updated successfly.", HttpStatus.OK);
     }
     
 }
