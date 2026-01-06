@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.ecommerce.models.Category;
+import com.example.ecommerce.payload.CategoryDTO;
 import com.example.ecommerce.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -19,14 +20,28 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api/v2")
 public class CategoryController {
+
+    // // endpoint for testing :
+    // @GetMapping("/test")
+    // public String postMethodName(
+    //     @RequestParam(name = "pageNumber") Integer pageNumber,
+    //     @RequestParam(name="pageSize") Integer pageSize
+    // ) {
+    //     return "the page number is : "+pageNumber+"\n"+"the page size : "+pageSize;
+    // }
+    
+
     // Calling the category service :
     @Autowired
     private CategoryService categoryService;
 
     // get all categories :
     @GetMapping("/public/categories")
-    public ResponseEntity<?> getAllCategories() {
-        return categoryService.getAllCategories();
+    public ResponseEntity<?> getAllCategories(
+        @RequestParam(name="pageSize") Integer pageSize,
+        @RequestParam(name="pageNumber") Integer pageNumber
+    ) {
+        return categoryService.getAllCategories(pageNumber, pageSize);
     }
 
     // getting category By Id:
@@ -37,8 +52,8 @@ public class CategoryController {
 
     // add Category :
     @PostMapping("/admin/addCategory")
-    public ResponseEntity<?> addCategory(@Valid @RequestBody Category newCategory) {
-        return categoryService.addNewCategory(newCategory);
+    public ResponseEntity<?> addCategory(@Valid @RequestBody CategoryDTO newCategoryDTO) {
+        return categoryService.addNewCategory(newCategoryDTO);
     }
 
     // delete category :
@@ -49,7 +64,7 @@ public class CategoryController {
 
     // update category :
     @PutMapping("/admin/updateCategory/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id,@Valid @RequestBody Category categoryToUpdate) {
-        return categoryService.updateCategory(id, categoryToUpdate);
+    public ResponseEntity<?> updateCategory(@PathVariable Long id,@Valid @RequestBody CategoryDTO categoryToUpdateDto) {
+        return categoryService.updateCategory(id, categoryToUpdateDto);
     }
 }
