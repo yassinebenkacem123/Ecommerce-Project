@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* defining the variable or the custom colors and components that we will use. */
+
+
+
+
+.bg-color {
+    @apply bg-yellow-50/70
+}
+.color-primary{
+    @apply text-stone-800
+}
+
+.color-secondary{
+    @apply text-stone-700
+}
+.big-title-design{
+
+}
+
+.title-font{
+    @apply text-stone-800 text-5xl font-bold font-serif
+
+}
+.text-font{
+
+}
