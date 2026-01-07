@@ -10,7 +10,12 @@ import com.example.ecommerce.payload.CategoryResponse;
 public interface CategoryService {
 
     // get all categories :
-    public ResponseEntity<CategoryResponse> getAllCategories(Integer pageNumber, Integer pageSize);
+    public ResponseEntity<CategoryResponse> getAllCategories(
+        Integer pageNumber, 
+        Integer pageSize, 
+        String sortBy, 
+        String sortOrder
+    );
 
     // get category by Id:
     public ResponseEntity<Category> getCategoryById(Long categoryId);

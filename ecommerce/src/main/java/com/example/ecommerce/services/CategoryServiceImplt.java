@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,8 +31,19 @@ public class CategoryServiceImplt implements CategoryService {
 
     // get all categories :
     @Override
-    public ResponseEntity<CategoryResponse> getAllCategories(Integer pageNumber, Integer pageSize) {
-        List<Category> categories = categoryRepo.findAll();
+    public ResponseEntity<CategoryResponse> getAllCategories(
+        Integer pageNumber, 
+        Integer pageSize,
+        String sortBy, 
+        String sortOrder
+    ) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")  ? 
+            Sort.by(sortBy).ascending()
+        : Sort.by(sortBy).descending();
+        
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Page<Category> pageCategory = categoryRepo.findAll(pageDetails);
+        List<Category> categories = pageCategory.getContent();
         if(categories.isEmpty())
         {
             throw new APIException("No Category created until now.");
@@ -38,6 +53,11 @@ public class CategoryServiceImplt implements CategoryService {
 
         CategoryResponse categoryResponse = new CategoryResponse();
         categoryResponse.setContent(categoryDTOs);
+        categoryResponse.setPageNumber(pageCategory.getNumber());
+        categoryResponse.setPageSize(pageCategory.getSize());
+        categoryResponse.setTotalPages(pageCategory.getTotalPages());
+        categoryResponse.setTotalElements(pageCategory.getTotalElements());
+        categoryResponse.setTheLast(pageCategory.isLast());
         return new ResponseEntity<>(categoryResponse, HttpStatus.OK);
     }
 
