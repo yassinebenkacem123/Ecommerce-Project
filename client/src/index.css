@@ -4,10 +4,10 @@
 
 
 
-
 .bg-color {
     @apply bg-yellow-50/70
 }
+
 .color-primary{
     @apply text-stone-800
 }
