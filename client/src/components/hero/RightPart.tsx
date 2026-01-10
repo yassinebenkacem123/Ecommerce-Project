@@ -2,7 +2,7 @@ import { FaStar } from "react-icons/fa6"
 import type { JSX } from "react";
 const RightPart = (): JSX.Element => {
   return (
-    <div className='w-[30%] flex flex-col  gap-5 py-10 justify-center px-5'>
+    <div className='w-[30%] flex flex-col  gap-5 justify-center px-5'>
         {/* top one */}
         <div className="flex flex-col gap-5">
             <div className='flex justify-around px-7 items-center'>

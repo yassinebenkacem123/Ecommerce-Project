@@ -1,10 +1,11 @@
-import React from 'react'
 import HeroSection from '../components/hero/HeroSection'
-
-const Home = () => {
+import type {JSX} from "react";
+import AboutUs from '../components/sections/aboutus/AboutUs';
+const Home = ():JSX.Element => {
   return (
     <> 
-      <HeroSection  />   
+      <HeroSection  />  
+      <AboutUs  />
     </>
   )
 }
