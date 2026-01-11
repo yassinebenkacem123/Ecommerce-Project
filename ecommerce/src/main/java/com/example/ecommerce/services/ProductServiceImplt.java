@@ -46,7 +46,7 @@ public class ProductServiceImplt implements ProductService {
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage("Product added successfly.");
         apiResponse.setStatus(true);
-        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
 
     // get all products.
@@ -87,4 +87,55 @@ public class ProductServiceImplt implements ProductService {
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
     
+    // search product by keyword
+    @Override
+    public ResponseEntity<ProductResponse> searchForProductByKeyword(String keyword) {
+        List<Product> products = productRepo.findByProductNameLikeIgnoreCase('%'+keyword+'%');
+        if(products.isEmpty()){
+            throw new ResourceNotFoundException("No products were found matching this keyword");
+        }
+        List<ProductDTO> productDTOs = products.stream().map((product) -> 
+            modelMapper.map(product, ProductDTO.class)    
+        ).toList();   
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(productDTOs);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
+
+
+    // update product
+    @Override
+    public ResponseEntity<APIResponse> updateProduct(Long productId, ProductDTO productDto) {
+        Product productToUpdate = productRepo.findById(productId)
+            .orElseThrow(()-> new ResourceNotFoundException("Product","productId",productId));
+        
+        productToUpdate.setProductName(productDto.getProductName());
+        productToUpdate.setDescription(productDto.getDescription());
+        productToUpdate.setPrice(productDto.getPrice());
+        productToUpdate.setProductImage(productDto.getProductImage());
+        productToUpdate.setQuantity(productDto.getQuantity());
+        productToUpdate.setDiscounte(productDto.getDiscounte());
+        productToUpdate.setSpecialPrice(productDto.getSpecialPrice());
+        
+
+        productRepo.save(productToUpdate);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Product updated successfly");
+        apiResponse.setStatus(true);
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    // delete product :
+    @Override
+    public ResponseEntity<APIResponse> deleteProductService(Long productId) {
+        Product product = productRepo.findById(productId)
+            .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",productId));
+        productRepo.delete(product);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Product deleted Successfly.");
+        apiResponse.setStatus(true);
+
+        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
+    }
 }
