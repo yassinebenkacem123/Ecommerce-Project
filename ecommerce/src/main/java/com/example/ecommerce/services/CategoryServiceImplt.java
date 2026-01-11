@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.example.ecommerce.exceptions.APIException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Category;
+import com.example.ecommerce.payload.APIResponse;
 import com.example.ecommerce.payload.CategoryDTO;
 import com.example.ecommerce.payload.CategoryResponse;
 import com.example.ecommerce.repository.CategoryRepo;
@@ -46,7 +47,7 @@ public class CategoryServiceImplt implements CategoryService {
         List<Category> categories = pageCategory.getContent();
         if(categories.isEmpty())
         {
-            throw new APIException("No Category created until now.");
+            throw new ResourceNotFoundException("No Category created until now.");
         }
         List<CategoryDTO> categoryDTOs = categories.stream().
             map(c -> modelMapper.map(c, CategoryDTO.class)).toList();
@@ -71,28 +72,34 @@ public class CategoryServiceImplt implements CategoryService {
 
     // add new Category :
     @Override
-    public ResponseEntity<String> addNewCategory(CategoryDTO newCategoryDto) {
+    public ResponseEntity<APIResponse> addNewCategory(CategoryDTO newCategoryDto) {
         Category existCategory = categoryRepo.findByCategoryName(newCategoryDto.getCategoryName());
         if(existCategory != null){
             throw new APIException("Category with name "+ newCategoryDto.getCategoryName()+" already exist.");
         }
         Category categoryToSave = modelMapper.map(newCategoryDto, Category.class);
         categoryRepo.save(categoryToSave);
-        return new ResponseEntity<>("Category added successfly.", HttpStatus.OK);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Category added successfly.");
+        apiResponse.setStatus(true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     // delete category :
     @Override
-    public ResponseEntity<String> deleteCategory(Long categoryId) {
+    public ResponseEntity<APIResponse> deleteCategory(Long categoryId) {
         Category categoryDeleted = categoryRepo.findById(categoryId)
                 .orElseThrow(() ->  new ResourceNotFoundException("Category", "Category ID", categoryId));
         categoryRepo.delete(categoryDeleted);
-        return new ResponseEntity<>("Category Deleted successfly.", HttpStatus.OK);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Category Deleted successfly.");
+        apiResponse.setStatus(true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     // updating category :
     @Override
-    public ResponseEntity<String> updateCategory(Long categoryId,CategoryDTO categoryDto) {
+    public ResponseEntity<APIResponse> updateCategory(Long categoryId,CategoryDTO categoryDto) {
         Category existedCategory = categoryRepo.findByCategoryName(categoryDto.getCategoryName());
         if(existedCategory != null)
         {
@@ -102,7 +109,10 @@ public class CategoryServiceImplt implements CategoryService {
                 .orElseThrow(() ->  new ResourceNotFoundException("Category", "Category ID", categoryId));
         categoryToUpdate.setCategoryName(categoryDto.getCategoryName());
         categoryRepo.save(categoryToUpdate);
-        return new ResponseEntity<>("Category updated successfly.", HttpStatus.OK);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Category Updated Successfly.");
+        apiResponse.setStatus(true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 }

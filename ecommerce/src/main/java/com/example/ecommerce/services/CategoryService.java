@@ -4,6 +4,7 @@ package com.example.ecommerce.services;
 import org.springframework.http.ResponseEntity;
 
 import com.example.ecommerce.models.Category;
+import com.example.ecommerce.payload.APIResponse;
 import com.example.ecommerce.payload.CategoryDTO;
 import com.example.ecommerce.payload.CategoryResponse;
 
@@ -21,11 +22,11 @@ public interface CategoryService {
     public ResponseEntity<Category> getCategoryById(Long categoryId);
 
     // post category :
-    public ResponseEntity<String> addNewCategory(CategoryDTO newCategoryDto);
+    public ResponseEntity<APIResponse> addNewCategory(CategoryDTO newCategoryDto);
 
     // delete category :
-    public ResponseEntity<String> deleteCategory(Long categoryId);
+    public ResponseEntity<APIResponse> deleteCategory(Long categoryId);
 
     // update category :
-    public ResponseEntity<String> updateCategory(Long categoryId, CategoryDTO categorydDto);
+    public ResponseEntity<APIResponse> updateCategory(Long categoryId, CategoryDTO categorydDto);
 }
