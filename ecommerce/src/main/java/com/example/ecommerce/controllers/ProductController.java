@@ -1,17 +1,22 @@
 package com.example.ecommerce.controllers;
 
-import org.apache.catalina.connector.Response;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.example.ecommerce.models.Product;
+import com.example.ecommerce.config.AppConstants;
 import com.example.ecommerce.payload.ProductDTO;
 import com.example.ecommerce.services.ProductService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +35,7 @@ public class ProductController {
     // add a new product : 
     @PostMapping("/admin/categories/{categoryId}/addProduct")
     public ResponseEntity<?> addNewProduct(
-        @RequestBody ProductDTO productDTO, 
+        @RequestBody @Valid ProductDTO productDTO, 
         @PathVariable(name = "categoryId") Long categoryId
     ){
         return productService.addNewProduct(productDTO, categoryId);
@@ -38,8 +43,29 @@ public class ProductController {
 
     // get all products : 
     @GetMapping("/public/getAllProducts")
-    public ResponseEntity<?> getAllProducts(){
-        return productService.getAllProduct();
+    public ResponseEntity<?> getAllProducts(
+        @RequestParam(
+            name="pageSize",
+            required = false,
+            defaultValue = AppConstants.PAGE_SIZE
+        ) Integer pageSize,
+        @RequestParam(
+            name="pageNumber",
+            required = false,
+            defaultValue = AppConstants.PAGE_NUMBER
+        ) Integer pageNumber,
+        @RequestParam(
+            name="sortBy",
+            required = false,
+            defaultValue = AppConstants.SORT_BY
+        ) String sortBy,
+        @RequestParam(
+            name="sortOrder",
+            required = false,
+            defaultValue = AppConstants.SORT_DIR
+        ) String sortOrder
+    ){
+        return productService.getAllProduct(pageNumber, pageSize, sortBy, sortOrder);
     }
     
 
@@ -66,6 +92,15 @@ public class ProductController {
     @DeleteMapping("/admin/deleteProduct/{productId}")
     public ResponseEntity<?> deletedProduct(@PathVariable Long productId){
         return productService.deleteProductService(productId);
+    }
+
+    // update product image : 
+    @PutMapping("/admin/updateProduct/image/{productId}")
+    public ResponseEntity<?> updateProductImage(
+        @PathVariable Long productId, 
+        @RequestParam(name="image") MultipartFile image
+    ) throws IOException{
+        return productService.updateProductImageService(productId, image) ;
     }
 
     

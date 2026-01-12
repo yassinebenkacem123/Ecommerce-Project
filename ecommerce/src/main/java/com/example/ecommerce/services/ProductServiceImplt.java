@@ -1,14 +1,22 @@
 package com.example.ecommerce.services;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.ecommerce.exceptions.APIException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Category;
 import com.example.ecommerce.models.Product;
@@ -17,6 +25,7 @@ import com.example.ecommerce.payload.ProductDTO;
 import com.example.ecommerce.payload.ProductResponse;
 import com.example.ecommerce.repository.CategoryRepo;
 import com.example.ecommerce.repository.ProductRepo;
+
 
 @Service
 public class ProductServiceImplt implements ProductService {
@@ -29,6 +38,12 @@ public class ProductServiceImplt implements ProductService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    FileService fileService;
+
+    @Value("${project.imagePath}")
+    private String pathRoot ;
+    
     // add new product.
     @Override
     public ResponseEntity<APIResponse> addNewProduct(ProductDTO productDTO, Long categoryId) {
@@ -37,24 +52,41 @@ public class ProductServiceImplt implements ProductService {
 
         // converting productDTO to product class.
         Product productToAdd = modelMapper.map(productDTO, Product.class);
-        
+        Product existProduct =  productRepo.findByProductName(productDTO.getProductName());
+        if(existProduct != null)
+        {
+            throw new APIException("Product With the name: "+existProduct.getProductName()+" already exist.");
+        }
         productToAdd.setCategory(existedCategory);
         Double specialPrice = productDTO.getPrice() - (productDTO.getPrice()*productDTO.getDiscounte()*0.01);
         productToAdd.setSpecialPrice(specialPrice);
-        
+        productToAdd.setProductImage("default.png");
+
         productRepo.save(productToAdd);
+
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage("Product added successfly.");
         apiResponse.setStatus(true);
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
+    
 
     // get all products.
     @Override
-    public ResponseEntity<ProductResponse> getAllProduct() {
-        List<Product> products = productRepo.findAll();
+    public ResponseEntity<ProductResponse> getAllProduct(
+        Integer pageSize,
+        Integer pageNumber,
+        String sortBy,
+        String orderBy
+    ) {
         
-        //=> verifying if there's any products.
+        Sort sortByAndOrder = orderBy.equalsIgnoreCase("asc") ?  
+            Sort.by(sortBy).ascending()  : Sort.by(sortBy).descending();
+        ; 
+        Pageable productPageDetails  = PageRequest.of(pageNumber,pageSize, sortByAndOrder);
+        Page<Product > productPage = productRepo.findAll(productPageDetails);
+        List<Product> products = productPage.getContent();
+        // verifying if there's any products.
         if(products.isEmpty()){
             throw new ResourceNotFoundException("There's no product added Until now.");
         }
@@ -65,9 +97,16 @@ public class ProductServiceImplt implements ProductService {
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productsDtos);
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setTotalElements(productPage.getTotalElements());
+        productResponse.setTotalPages(productPage.getTotalPages());
+        productResponse.setTheLast(productPage.isLast());
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
 
+
+    // get product by category :
     @Override
     public ResponseEntity<ProductResponse> getProductByCategory(Long categoryId) {
         Category category = categoryRepo.findById(categoryId)
@@ -138,4 +177,25 @@ public class ProductServiceImplt implements ProductService {
 
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
+
+    // update product :
+    @Override
+    public ResponseEntity<APIResponse> updateProductImageService(Long productId, MultipartFile image) throws IOException {
+        Product productToUpdate = productRepo.findById(productId)
+            .orElseThrow(()-> new ResourceNotFoundException("Porduct","PorductId",productId));
+        
+        String imagePathName = fileService.getImagePathName(pathRoot,image);
+
+        productToUpdate.setProductImage(imagePathName);
+        
+        // save the new updated product : 
+        productRepo.save(productToUpdate);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Product Image updated successfly.");
+        apiResponse.setStatus(true);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK) ;
+    }
+
+
+
 }
