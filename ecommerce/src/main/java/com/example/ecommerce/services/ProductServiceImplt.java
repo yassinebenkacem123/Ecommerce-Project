@@ -108,11 +108,25 @@ public class ProductServiceImplt implements ProductService {
 
     // get product by category :
     @Override
-    public ResponseEntity<ProductResponse> getProductByCategory(Long categoryId) {
+    public ResponseEntity<ProductResponse> getProductByCategory(
+        Long categoryId,
+        Integer pageSize,
+        Integer pageNumber,
+        String sortBy,
+        String orderBy
+    ) {
         Category category = categoryRepo.findById(categoryId)
             .orElseThrow(()-> new ResourceNotFoundException("Category", "CategoryId", categoryId));
-        List<Product> products = productRepo.findByCategoryOrderByPriceAsc(category);
-        //=> verifying if there's any products.
+        Sort sortByAndOrder = orderBy.equalsIgnoreCase("asc") ?
+            Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber,pageSize, sortByAndOrder);
+        
+        Page<Product> productPage = productRepo.findByCategoryOrderByPriceAsc(category, pageDetails);
+
+        List<Product> products = productPage.getContent();
+
+        //verifying if there's any products.
         if(products.isEmpty()){
             throw new ResourceNotFoundException("There's no product added Until now.");
         }
@@ -122,14 +136,34 @@ public class ProductServiceImplt implements ProductService {
         ).toList();
 
         ProductResponse productResponse = new ProductResponse();
+        
         productResponse.setContent(productsDtos);
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setTotalElements(productPage.getTotalElements());
+        productResponse.setTotalPages(productPage.getTotalPages());
+        productResponse.setTheLast(productPage.isLast());
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
     
     // search product by keyword
     @Override
-    public ResponseEntity<ProductResponse> searchForProductByKeyword(String keyword) {
-        List<Product> products = productRepo.findByProductNameLikeIgnoreCase('%'+keyword+'%');
+    public ResponseEntity<ProductResponse> searchForProductByKeyword(
+        String keyword,
+        Integer pageSize,
+        Integer pageNumber,
+        String sortBy,
+        String orderBy
+    ) {
+
+        // logic for pagination and sorting :
+        Sort sortByAndOrder = orderBy.equalsIgnoreCase("asc") ?
+            Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageDetails = PageRequest.of(pageNumber,pageSize, sortByAndOrder);
+        
+        Page<Product> productPage = productRepo.findByProductNameLikeIgnoreCase('%'+keyword+'%',pageDetails);
+
+        List<Product> products = productPage.getContent();
         if(products.isEmpty()){
             throw new ResourceNotFoundException("No products were found matching this keyword");
         }

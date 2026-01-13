@@ -22,10 +22,22 @@ public interface ProductService {
     );
 
     // get product by category.
-    public ResponseEntity<ProductResponse> getProductByCategory(Long categoryId);
+    public ResponseEntity<ProductResponse> getProductByCategory(
+        Long categoryId,
+        Integer pageNumber,
+        Integer pageSize,
+        String sortBy,
+        String orderBy
+    );
 
     // search product by keyword
-    public ResponseEntity<ProductResponse> searchForProductByKeyword(String keyword);
+    public ResponseEntity<ProductResponse> searchForProductByKeyword(
+        String keyword,
+        Integer pageNumber,
+        Integer pageSize,
+        String sortBy,
+        String orderBy
+    );
 
     // update product 
     public ResponseEntity<APIResponse>  updateProduct(Long productId, ProductDTO product);

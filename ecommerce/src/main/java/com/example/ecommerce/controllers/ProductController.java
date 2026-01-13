@@ -71,14 +71,58 @@ public class ProductController {
 
     // get product by category :
     @GetMapping("/public/getProductByCategory/{categoryId}")
-    public ResponseEntity<?> getProductByCategory(@PathVariable Long categoryId){
-        return productService.getProductByCategory(categoryId);
+    public ResponseEntity<?> getProductByCategory(
+        @PathVariable Long categoryId,
+        @RequestParam(
+            name="pageSize",
+            required = false,
+            defaultValue = AppConstants.PAGE_SIZE
+        ) Integer pageSize,
+        @RequestParam(
+            name="pageNumber",
+            required = false,
+            defaultValue = AppConstants.PAGE_NUMBER
+        ) Integer pageNumber,
+        @RequestParam(
+            name="sortBy",
+            required = false,
+            defaultValue = AppConstants.SORT_BY
+        ) String sortBy,
+        @RequestParam(
+            name="sortOrder",
+            required = false,
+            defaultValue = AppConstants.SORT_DIR
+        ) String sortOrder
+    ){
+        return productService.getProductByCategory(categoryId, pageNumber, pageSize, sortBy, sortOrder);
     }
 
     // get product by keyword :
     @GetMapping("/public/product/keyword/{keyword}")
-    public ResponseEntity<?> getProductByKeyword(@PathVariable String keyword){
-        return productService.searchForProductByKeyword(keyword);
+    public ResponseEntity<?> getProductByKeyword(
+        @PathVariable String keyword,
+        @RequestParam(
+            name="pageSize",
+            required = false,
+            defaultValue = AppConstants.PAGE_SIZE
+        ) Integer pageSize,
+        @RequestParam(
+            name="pageNumber",
+            required = false,
+            defaultValue = AppConstants.PAGE_NUMBER
+        ) Integer pageNumber,
+        @RequestParam(
+            name="sortBy",
+            required = false,
+            defaultValue = AppConstants.SORT_BY
+        ) String sortBy,
+        @RequestParam(
+            name="sortOrder",
+            required = false,
+            defaultValue = AppConstants.SORT_DIR
+        ) String sortOrder
+    ){
+        return productService.searchForProductByKeyword(keyword, pageNumber, pageSize, sortBy, sortOrder);
 
     }
 

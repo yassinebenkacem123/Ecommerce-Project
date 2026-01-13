@@ -26,7 +26,7 @@ const NavBar = (): JSX.Element => {
 
         {/* Login */}
         <button title="Login" 
-          className="border cursor-pointer border-stone-800 rounded-full p-3">
+          className="border-2 bg-orange-500 text-yellow-50 cursor-pointer border-stone-800 rounded-full p-3">
           <FaUser size={25}/>
         </button>
       </div>
