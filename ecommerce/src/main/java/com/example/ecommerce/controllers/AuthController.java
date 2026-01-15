@@ -1,5 +1,6 @@
 package com.example.ecommerce.controllers;
 
+import org.springframework.http.HttpHeaders;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,10 +8,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,16 +78,18 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        String jwtToken = jwtUtils.generateTokenFromUserName(userDetails);
+        ResponseCookie responseCookie = jwtUtils.generateJwtCookie(userDetails);
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setId(userDetails.getId());
-        loginResponse.setUsername(userDetails.getUsername());
-        loginResponse.setEmail(userDetails.getEmail());
-        loginResponse.setJwtToken(jwtToken);
-        loginResponse.setRoles(roles);
-        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+        LoginResponse loginResponse = new LoginResponse(
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            roles
+        );
+    
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+            .body(loginResponse);
 
     }
 
@@ -135,4 +140,42 @@ public class AuthController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    // getting using data :
+    @GetMapping("/user")
+    public ResponseEntity<?> currentUserName(Authentication authentication){
+        if(authentication != null){
+            UserDetailsImpl userDetails =  (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+            LoginResponse loginResponse = new LoginResponse(
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            roles);
+            return new ResponseEntity<>(loginResponse ,HttpStatus.OK);
+        }return null;
+    }
+
+    // logout
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutMethod(){
+        ResponseCookie cookie = jwtUtils.getCleanCookie();
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("You've been logout.");
+        apiResponse.setStatus(true);
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(apiResponse);
+    }
+
+
+
+
+    // in the future :
+    // reset password.
+    // forget password  i will add it in the future.
+    // google auth2.0
+
+
+    
 }
