@@ -6,6 +6,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -49,7 +50,7 @@ public class User {
     private String email;
     
     @NotBlank(message = "You must provide a password.")
-    @Size(max=50)
+    @Size(min=60, max=250, message = "The password must be between 6 and 50")
     private String password;
 
     @ManyToMany(

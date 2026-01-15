@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,9 +30,8 @@ public class Role {
     private Long roleId;
 
     @Enumerated(EnumType.STRING)
-    private AppRole roleName; // enum.
-
-    @ManyToMany(mappedBy = "userRoles")
+    private AppRole roleName;
+    @ManyToMany(mappedBy = "userRoles", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
     List<User> users = new ArrayList<User>();
     

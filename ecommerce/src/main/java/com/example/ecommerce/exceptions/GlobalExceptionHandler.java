@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
-    // for handling the api exception : like the when category name already exist or email already exist stuff like these
+    // for handling the api exception : like the when category name already exist or email already exist stuffs like these
     @ExceptionHandler(APIException.class)
     public ResponseEntity<APIResponse> apiExceptionHandler(APIException e){
         String message = e.getMessage();
