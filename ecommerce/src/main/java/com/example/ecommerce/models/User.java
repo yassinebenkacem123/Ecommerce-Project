@@ -6,7 +6,6 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
@@ -83,6 +83,16 @@ public class User {
     )
     @JsonIgnore
     private Set<Product> sellerProducts = new HashSet<>();
+
+
+    @OneToOne(mappedBy = "user", cascade = {
+        CascadeType.PERSIST, 
+        CascadeType.MERGE, 
+        CascadeType.REMOVE
+    })
+    private Cart cart;
+
+
     
 
 }
