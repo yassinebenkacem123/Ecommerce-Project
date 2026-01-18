@@ -3,6 +3,7 @@ package com.example.ecommerce.services;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.ecommerce.exceptions.APIException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
+import com.example.ecommerce.models.Cart;
 import com.example.ecommerce.models.Category;
 import com.example.ecommerce.models.Product;
 import com.example.ecommerce.payload.APIResponse;
+import com.example.ecommerce.payload.CartDTO;
 import com.example.ecommerce.payload.ProductDTO;
 import com.example.ecommerce.payload.ProductResponse;
+import com.example.ecommerce.repository.CartRepo;
 import com.example.ecommerce.repository.CategoryRepo;
 import com.example.ecommerce.repository.ProductRepo;
 
@@ -41,8 +45,14 @@ public class ProductServiceImplt implements ProductService {
     @Autowired
     FileService fileService;
 
+    @Autowired 
+    CartService cartService;
+
     @Value("${project.imagePath}")
     private String pathRoot ;
+
+    @Autowired
+    CartRepo cartRepo;
     
     // add new product.
     @Override
@@ -192,9 +202,23 @@ public class ProductServiceImplt implements ProductService {
         
 
         productRepo.save(productToUpdate);
+
+        List<Cart> carts = cartRepo.findCartsByProductId(productId);
+
+        List<CartDTO> cartDTOs = carts.stream().map(cart -> {
+            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+            List<ProductDTO> products = cart.getCartItems().stream()
+                .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class))
+                .collect(Collectors.toList());
+            cartDTO.setProducts(products);
+            return cartDTO;
+        }).collect(Collectors.toList());
+
+        cartDTOs.forEach(cart -> cartService.updateProductInCarts(cart.getCartId(), productId));
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage("Product updated successfly");
         apiResponse.setStatus(true);
+
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
@@ -204,6 +228,11 @@ public class ProductServiceImplt implements ProductService {
     public ResponseEntity<APIResponse> deleteProductService(Long productId) {
         Product product = productRepo.findById(productId)
             .orElseThrow(()-> new ResourceNotFoundException("Product","ProductId",productId));
+        
+        
+        List<Cart> carts = cartRepo.findCartsByProductId(productId);
+        carts.forEach(cart -> cartService.deleteProductFromCartSerivce(cart.getCartId(), productId));
+
         productRepo.delete(product);
         APIResponse apiResponse = new APIResponse();
         apiResponse.setMessage("Product deleted Successfly.");

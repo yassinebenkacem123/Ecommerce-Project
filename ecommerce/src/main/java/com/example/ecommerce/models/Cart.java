@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cardId;
+    private Long cartId;
     
     private Double totalPrice = 0.0;
 

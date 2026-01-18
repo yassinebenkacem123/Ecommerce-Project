@@ -1,6 +1,8 @@
 package com.example.ecommerce.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +43,6 @@ public class User {
 
     @NotBlank(message =  "User name required.")
     @Size(min=3,max = 50, message = "Username must be between 3 and 50 characters")
-
     private String username;
 
     @NotBlank(message = "You must provide an email.")
@@ -53,23 +54,20 @@ public class User {
     @Size(min=60, max=250, message = "The password must be between 6 and 50")
     private String password;
 
-    @ManyToMany(
+    @OneToMany(
+        mappedBy = "user",
         cascade = {CascadeType.PERSIST, CascadeType.MERGE},
         fetch = FetchType.EAGER
     )
-    @JoinTable(
-        name = "user_adress",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns =  @JoinColumn(name = "adress_id")
-    )
-    Set<Adress> userAdresses = new HashSet<>();
+    private List<Address> userAddresses = new ArrayList<>(); 
+
 
     @ManyToMany(
         cascade = {CascadeType.PERSIST, CascadeType.MERGE},
         fetch = FetchType.EAGER
     )
     @JoinTable(
-        name = "user_role",
+        name = "user_roles",
         joinColumns =  @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )

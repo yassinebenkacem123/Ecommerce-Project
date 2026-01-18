@@ -1,6 +1,9 @@
 package com.example.ecommerce.models;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -42,7 +45,7 @@ public class Product {
     
 
     @NotNull(message = "You must provide a quantity for the product.")
-    @Min(value = 1, message = "Quantity must be at least 1.")    
+    @Min(value = 0, message = "Stock cannot be negative")
     private Integer quantity;
     private Double price;
     private Double specialPrice;
@@ -51,7 +54,6 @@ public class Product {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     private Category category;
-
 
     @ToString.Exclude
     @ManyToOne
@@ -65,4 +67,7 @@ public class Product {
         fetch = FetchType.EAGER)
     private List<CartItem> cartItems;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems = new ArrayList<>();
 }

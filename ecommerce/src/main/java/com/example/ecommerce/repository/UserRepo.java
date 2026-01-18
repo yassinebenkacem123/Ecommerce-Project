@@ -3,7 +3,6 @@ package com.example.ecommerce.repository;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Repository;
 
 import com.example.ecommerce.models.User;
@@ -23,7 +22,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
 
-    User findByEmail();
 
     
 } 
