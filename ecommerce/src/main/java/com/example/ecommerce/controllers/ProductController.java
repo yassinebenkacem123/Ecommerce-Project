@@ -57,7 +57,7 @@ public class ProductController {
         @RequestParam(
             name="sortBy",
             required = false,
-            defaultValue = AppConstants.SORT_BY
+            defaultValue = "productId"
         ) String sortBy,
         @RequestParam(
             name="sortOrder",
@@ -86,7 +86,7 @@ public class ProductController {
         @RequestParam(
             name="sortBy",
             required = false,
-            defaultValue = AppConstants.SORT_BY
+            defaultValue = "productId"
         ) String sortBy,
         @RequestParam(
             name="sortOrder",
@@ -114,7 +114,7 @@ public class ProductController {
         @RequestParam(
             name="sortBy",
             required = false,
-            defaultValue = AppConstants.SORT_BY
+            defaultValue = "productId"
         ) String sortBy,
         @RequestParam(
             name="sortOrder",

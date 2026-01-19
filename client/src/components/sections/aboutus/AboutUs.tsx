@@ -29,7 +29,7 @@ const AboutUs = ():JSX.Element => {
                 </div>
                 <div className="w-40 absolute rotate-210 h-20 bg-orange-500 rounded-t-full"/>
             </div>
-            <div className="bg-yellow-300 flex relative items-center justify-center w-[70%] h-80">
+            <div className="bg-amber-300  flex relative items-center justify-center w-[70%] h-80">
                 <img
                     className="w-100 bottom-0 absolute"
                     alt="about section main image" 

@@ -66,6 +66,8 @@ public class WebSecurityConfig {
             .requestMatchers("/api/v2/public/**").permitAll()
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/images/**").permitAll()
+            .requestMatchers("/").permitAll()
+            .requestMatchers("/swagger-ui.html").permitAll()
             .anyRequest().authenticated())
         .sessionManagement(session -> session.sessionCreationPolicy(
             SessionCreationPolicy.STATELESS

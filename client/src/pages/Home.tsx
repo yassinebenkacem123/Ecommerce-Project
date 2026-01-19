@@ -4,6 +4,7 @@ import AboutUs from '../components/sections/aboutus/AboutUs';
 import OurAmazingCameras from '../components/sections/details/OurAmazingCameras';
 import ExploreSection from '../components/sections/explore/ExploreSection';
 import ProductDetails from '../components/sections/productDetails/ProductDetails';
+import ShownCreativity from '../components/sections/shownCreativity/ShownCreativity';
 const Home = ():JSX.Element => {
   return (
     <> 
@@ -12,6 +13,7 @@ const Home = ():JSX.Element => {
       <OurAmazingCameras  />
       <ExploreSection />
       <ProductDetails />
+      <ShownCreativity  />
     </>
   )
 }

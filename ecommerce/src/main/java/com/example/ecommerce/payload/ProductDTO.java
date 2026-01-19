@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductDTO {
     
+    private Long productId;
     @NotBlank(message = "You must provide a product name.")
     @Size(min=2, message = "Product name must contain at least 2 caracters.")
     private String productName;

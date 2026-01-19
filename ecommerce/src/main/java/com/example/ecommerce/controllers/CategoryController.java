@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.config.AppConstants;
+import com.example.ecommerce.payload.APIResponse;
 import com.example.ecommerce.payload.CategoryDTO;
 import com.example.ecommerce.services.CategoryService;
 
@@ -23,15 +24,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/api/v2")
 public class CategoryController {
 
-    // // endpoint for testing :
-    // @GetMapping("/test")
-    // public String postMethodName(
-    //     @RequestParam(name = "pageNumber") Integer pageNumber,
-    //     @RequestParam(name="pageSize") Integer pageSize
-    // ) {
-    //     return "the page number is : "+pageNumber+"\n"+"the page size : "+pageSize;
-    // }
-    
+    @GetMapping("/test")
+    public ResponseEntity<APIResponse> testServer(){
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setMessage("Server is running.");
+        apiResponse.setStatus(true);
+        return ResponseEntity.ok().body(apiResponse);
+    }
 
     // Calling the category service :
     @Autowired

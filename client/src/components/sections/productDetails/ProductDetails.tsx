@@ -6,9 +6,9 @@ const ProductDetails = () => {
       <h1 className='title-font flex flex-col'>
         Our Porduct <br/>
         <div className="flex gap-10 items-center">
-          <div className="bg-amber-300 px-10 flex text-center justify-center items-center w-[60%] h-30 rounded-full">
+          <div className="bg-amber-300 px-10 py-3 flex text-center justify-center items-center w-[60%] h-30 rounded-full">
             <img
-              className="w-130 h-60" 
+              className="w-150 h-20" 
               src="/icons/right-arrow.png" alt="arrow" />
          </div>
          Details
@@ -34,7 +34,7 @@ const ProductDetails = () => {
 
         {/* two right images. */}
         <div className="flex w-[50%] flex-col gap-5">
-          <div className="p-3 flex items-center relative justify-center bg-stone-200/40">
+          <div className="p-3 flex  items-center relative justify-center bg-stone-200/40">
            <div className="absolute top-4 flex flex-col gap-4 left-4">
              <h1 className="text-xl font-semibold">
                 Canon EOS R6 

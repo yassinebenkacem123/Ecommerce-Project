@@ -84,8 +84,8 @@ public class ProductServiceImplt implements ProductService {
     // get all products.
     @Override
     public ResponseEntity<ProductResponse> getAllProduct(
-        Integer pageSize,
         Integer pageNumber,
+        Integer pageSize,
         String sortBy,
         String orderBy
     ) {
@@ -112,6 +112,7 @@ public class ProductServiceImplt implements ProductService {
         productResponse.setTotalElements(productPage.getTotalElements());
         productResponse.setTotalPages(productPage.getTotalPages());
         productResponse.setTheLast(productPage.isLast());
+        productResponse.setPageSize(pageSize);
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
 
@@ -120,8 +121,8 @@ public class ProductServiceImplt implements ProductService {
     @Override
     public ResponseEntity<ProductResponse> getProductByCategory(
         Long categoryId,
-        Integer pageSize,
         Integer pageNumber,
+        Integer pageSize,
         String sortBy,
         String orderBy
     ) {
@@ -152,6 +153,7 @@ public class ProductServiceImplt implements ProductService {
         productResponse.setPageNumber(productPage.getNumber());
         productResponse.setTotalElements(productPage.getTotalElements());
         productResponse.setTotalPages(productPage.getTotalPages());
+        productResponse.setPageSize(pageSize);
         productResponse.setTheLast(productPage.isLast());
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
@@ -160,8 +162,8 @@ public class ProductServiceImplt implements ProductService {
     @Override
     public ResponseEntity<ProductResponse> searchForProductByKeyword(
         String keyword,
-        Integer pageSize,
         Integer pageNumber,
+        Integer pageSize,
         String sortBy,
         String orderBy
     ) {
