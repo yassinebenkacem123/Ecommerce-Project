@@ -12,3 +12,12 @@ export type StartDecoProps = {
   position?: string, 
   padding?: string
 }
+export type FooterContentProps = {
+  name:string,
+  links:{
+    name?:string,
+    link?:string,
+    email?:string,
+    phone?:string
+  }[]
+}

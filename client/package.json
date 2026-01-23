@@ -10,12 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/rapier": "^2.2.0",
     "@tailwindcss/vite": "^4.1.18",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "gsap": "^3.14.2",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.28.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icon": "^1.0.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.11.0",
+    "split-type": "^0.3.4",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
