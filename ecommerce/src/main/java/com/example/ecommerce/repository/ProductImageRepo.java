@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.ecommerce.models.ProductImage;
 
 @Repository
-public interface ProductImageRepo extends JpaRepository<Long, ProductImage> {
+public interface ProductImageRepo extends JpaRepository<ProductImage, Long> {
     
 }
