@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +40,9 @@ public class ProductImageServiceImplt implements ProductImageService{
 
     @Autowired
     ModelMapper modelMapper;
+
+
+    
     // add product's images service :
     @Override
     public ResponseEntity<ProductImageDTO> addImageToProductService(Long productId, MultipartFile imageProduct) {
@@ -50,13 +54,14 @@ public class ProductImageServiceImplt implements ProductImageService{
         ProductImage productImage = new ProductImage();
         productImage.setImageUrl(uploadResult.get("secure_url").toString());
         productImage.setProduct(product);
-
+        productImage.setPublicId(uploadResult.get("public_id").toString());
         ProductImage savedProductImage  =  productImageRepo.save(productImage);
 
         ProductImageDTO productImageDTO = new ProductImageDTO();
         productImageDTO.setImageId(savedProductImage.getImageId());
         productImageDTO.setImageUrl(savedProductImage.getImageUrl());
-        return ResponseEntity.ok().body(productImageDTO);
+        productImageDTO.setPublicId(savedProductImage.getPublicId());
+        return new ResponseEntity<>(productImageDTO, HttpStatus.CREATED);
     }
 
     // get product's images service :
@@ -90,6 +95,30 @@ public class ProductImageServiceImplt implements ProductImageService{
         apiResponse.setMessage("Product image deleted successfly.");
         
         return ResponseEntity.ok().body(apiResponse);
+    }
+
+    // update product service :
+    @Override
+    public ResponseEntity<ProductImageDTO> updateImageProductService(Long imageId, MultipartFile newProductImage) {
+   
+        ProductImage imageToUpdate = productImageRepo.findById(imageId)
+            .orElseThrow(()-> new ResourceNotFoundException("ProductImage","productImageId", imageId)); 
+        if(!newProductImage.isEmpty()){
+            cloudinaryService.deleteImageFromCloudaniry(imageToUpdate.getPublicId());
+        
+            Map<String, String > uploadResult = cloudinaryService.uploadProductImage(
+                newProductImage,
+                imageToUpdate.getProduct().getProductName()
+            );
+            imageToUpdate.setImageUrl(uploadResult.get("secure_url").toString());
+            imageToUpdate.setPublicId(uploadResult.get("public_id").toString());
+        }
+
+        ProductImage newSavedImage = productImageRepo.save(imageToUpdate);
+
+        ProductImageDTO imageDTO = modelMapper.map(newSavedImage, ProductImageDTO.class);
+
+        return ResponseEntity.ok().body(imageDTO);
     }
     
 }

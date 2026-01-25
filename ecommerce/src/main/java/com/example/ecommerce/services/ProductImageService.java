@@ -16,5 +16,7 @@ public interface ProductImageService {
 
     ResponseEntity<APIResponse> deleteImageService(Long imageId);
 
+    ResponseEntity<ProductImageDTO> updateImageProductService(Long imageId, MultipartFile newProductImage);
+
     
 } 

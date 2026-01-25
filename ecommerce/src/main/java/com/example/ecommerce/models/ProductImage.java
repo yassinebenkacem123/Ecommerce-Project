@@ -22,6 +22,8 @@ public class ProductImage {
 
     private String imageUrl;
 
+    private String publicId;
+
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false) // i must add the ID product.=> DTO's.
     @JsonIgnore
