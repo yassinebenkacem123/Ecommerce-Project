@@ -2,7 +2,9 @@ package com.example.ecommerce.services;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.cloudinary.Cloudinary;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Product;
 import com.example.ecommerce.models.ProductImage;
+import com.example.ecommerce.payload.APIResponse;
 import com.example.ecommerce.payload.ProductImageDTO;
 import com.example.ecommerce.repository.ProductImageRepo;
 import com.example.ecommerce.repository.ProductRepo;
@@ -33,6 +36,9 @@ public class ProductImageServiceImplt implements ProductImageService{
     @Autowired
     ProductImageRepo productImageRepo;
 
+
+    @Autowired
+    ModelMapper modelMapper;
     // add product's images service :
     @Override
     public ResponseEntity<ProductImageDTO> addImageToProductService(Long productId, MultipartFile imageProduct) {
@@ -54,12 +60,36 @@ public class ProductImageServiceImplt implements ProductImageService{
     }
 
     // get product's images service :
-
     @Override
     public ResponseEntity<List<ProductImageDTO>> getProductImagesService(Long productId) {
+        Product product = productRepo.findById(productId).orElseThrow(
+            ()-> new ResourceNotFoundException("Porduct","ProductId",productId)
+        );
+        List<ProductImage> productImages = productImageRepo.findByProductId(productId);
+        if(productImages == null){
 
+            throw new ResourceNotFoundException("the Product "+product.getProductName()+" doesn't contain any pictures yet.");
+        }
+        List<ProductImageDTO> productImageDTOs = productImages.stream()
+            .map((productImage)-> modelMapper.map(productImages, ProductImageDTO.class))
+            .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok().body(productImageDTOs);
+    }
+    // delete image :
+    @Override
+    public ResponseEntity<APIResponse> deleteImageService(Long imageId) {
+        ProductImage productImage = productImageRepo.findById(imageId)
+            .orElseThrow(()-> new ResourceNotFoundException("Image","imageId",imageId)
+        );
+
+        productImageRepo.delete(productImage);
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setStatus(true);
+        apiResponse.setMessage("Product image deleted successfly.");
         
-        return null;
+        return ResponseEntity.ok().body(apiResponse);
     }
     
 }
