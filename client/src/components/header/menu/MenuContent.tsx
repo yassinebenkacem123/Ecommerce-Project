@@ -1,6 +1,7 @@
 import { IoCloseOutline } from "react-icons/io5";
 import { Link } from "react-router";
 import type { JSX } from "react";
+import { motion } from "framer-motion";
 import { 
     FaFacebook,  
     FaInstagram,
@@ -13,7 +14,7 @@ type MenuContentProps = {
     setOpenMenu:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MenuContent = ({setOpenMenu}: MenuContentProps) => {
+const MenuContent = ({setOpenMenu}: MenuContentProps):JSX.Element => {
     const links:string[] = [
         'Home',
         'Products',
@@ -44,7 +45,16 @@ const MenuContent = ({setOpenMenu}: MenuContentProps) => {
         }
     ]
   return (
-    <section className='inset-0 p-20 flex flex-col gap-10 absolute z-100 bg-stone-900 '>
+<motion.section 
+    variants={{
+        hidden:{x:-140, opacity:0},
+        visible:{x:0, opacity:1},
+    }}
+    initial="hidden"
+    animate="visible"
+    transition={{duration:0.75, ease:"easeOut", delay:0.2}}
+
+    className='inset-0 p-20 flex flex-col gap-10 absolute z-100 bg-stone-900 '>
     <div className="flex gap-30">
         <div>
             {/* closse button */}
@@ -83,7 +93,7 @@ const MenuContent = ({setOpenMenu}: MenuContentProps) => {
         </div>
     </div>   
 
-    </section>
+    </motion.section>
   )
 }
 

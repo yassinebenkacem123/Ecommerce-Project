@@ -1,6 +1,5 @@
 package com.example.ecommerce.repository;
 
-import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

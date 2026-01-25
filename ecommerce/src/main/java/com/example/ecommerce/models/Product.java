@@ -38,7 +38,7 @@ public class Product {
     @Size(min=2, message = "Product name must contain at least 2 caracters.")
     private String productName;
     
-    private String productImage;
+    private String productMainImage;
         
     @Size(min=10,max = 150, message = "Description size must be between 10 and 150.")
     private String description;
@@ -70,4 +70,16 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "product", 
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE, 
+            CascadeType.REMOVE
+        },
+        orphanRemoval = true
+
+    )
+    private List<ProductImage> productImages = new ArrayList<>();
 }

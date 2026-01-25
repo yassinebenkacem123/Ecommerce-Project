@@ -70,7 +70,7 @@ public class ProductServiceImplt implements ProductService {
         productToAdd.setCategory(existedCategory);
         Double specialPrice = productDTO.getPrice() - (productDTO.getPrice()*productDTO.getDiscounte()*0.01);
         productToAdd.setSpecialPrice(specialPrice);
-        productToAdd.setProductImage("default.png");
+        productToAdd.setProductMainImage("default.png");
 
         productRepo.save(productToAdd);
 
@@ -197,7 +197,7 @@ public class ProductServiceImplt implements ProductService {
         productToUpdate.setProductName(productDto.getProductName());
         productToUpdate.setDescription(productDto.getDescription());
         productToUpdate.setPrice(productDto.getPrice());
-        productToUpdate.setProductImage(productDto.getProductImage());
+        productToUpdate.setProductMainImage(productDto.getProductImage());
         productToUpdate.setQuantity(productDto.getQuantity());
         productToUpdate.setDiscounte(productDto.getDiscounte());
         productToUpdate.setSpecialPrice(productDto.getSpecialPrice());
@@ -251,7 +251,7 @@ public class ProductServiceImplt implements ProductService {
         
         String imagePathName = fileService.getImagePathName(pathRoot,image);
 
-        productToUpdate.setProductImage(imagePathName);
+        productToUpdate.setProductMainImage(imagePathName);
         
         // save the new updated product : 
         productRepo.save(productToUpdate);
@@ -260,7 +260,5 @@ public class ProductServiceImplt implements ProductService {
         apiResponse.setStatus(true);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK) ;
     }
-
-
 
 }
