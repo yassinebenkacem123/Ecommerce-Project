@@ -1,5 +1,6 @@
 import { FaStar } from "react-icons/fa6"
 import type { JSX } from "react";
+import RevealText from "../../utils/RevealText";
 const RightPart = (): JSX.Element => {
   return (
     <div className='w-[30%] flex flex-col  gap-5 justify-center px-5'>
@@ -10,10 +11,10 @@ const RightPart = (): JSX.Element => {
             <FaStar key={index} size={22} className="text-yellow-300" />
           ))}
         </div>
-        <p className="tex-xl text-yellow-50 ">
+        <RevealText as="p" className="tex-xl text-yellow-50 ">
           I couldn't be happier with my purchase! The camera's image quality is outstanding,
           capturing every detail with vibrant colors.
-        </p>
+        </RevealText>
       </div>
 
       {/* bottom one */}

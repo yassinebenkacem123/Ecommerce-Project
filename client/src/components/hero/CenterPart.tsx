@@ -30,6 +30,7 @@ const CenterPart = ():JSX.Element => {
         className="w-[75%] relative -top-16"
         src={selectedImage}
       />
+
       
      <div className="w-full flex gap-4 items-center justify-between">
        <button

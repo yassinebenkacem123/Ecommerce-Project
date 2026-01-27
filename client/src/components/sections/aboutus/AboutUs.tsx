@@ -1,31 +1,26 @@
 import { GiStarShuriken } from "react-icons/gi";
 import type {JSX} from 'react'
-import Reveal from "../../../utils/Reveal";
+import RevealText from "../../../utils/RevealText";
 const AboutUs = ():JSX.Element => {
   return (
     <section className='h-screen py-10 flex mb-20 flex-col gap-10'>
         {/* Top part */}
         <div className='flex gap-5 items-center'>
-            <Reveal width="30%">
-                <h1 
-                    className='title-font w-full'
+                <RevealText as="h1" 
+                    className='title-font w-[30%]'
                     >
                         Who We Are
-                    </h1>
-            </Reveal>
+                    </RevealText>
             <div className='w-[70%] flex items-center'>
-              <Reveal width="75%">
-                <p className='text-font w-full'>
+                <RevealText as="p" className='w-[75%] text-font '>
                     We belive that every picture tells a story,
                     Our mission is to sell cameras that help you capture those stories in the best possible way,
                     And we are committed to providing you with the highest quality products and exceptional customer service.
-                </p>
-              </Reveal>
-               <Reveal width="w-25%">
+                </RevealText>
                     <img
-                    className='opacity-65 w-200' 
+                    className='
+                    opacity-65 w-[25%] ml-10' 
                     src="/camera-logo.png" alt="Camera Logo" />
-               </Reveal>
             </div>
         </div>
 
