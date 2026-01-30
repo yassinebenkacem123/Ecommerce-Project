@@ -1,14 +1,13 @@
-import transition from "../utils/transition"
+import Template from "../utils/template";
 
 const Login = () => {
   return (
-    <section className="h-screen flex justify-center items-center">
-        <h1 className="title-font">
-            Login page
-        </h1>
+    <Template>
+      <section className="h-screen flex justify-center items-center">
+        <h1 className="title-font">Login page</h1>
+      </section>
+    </Template>
+  );
+};
 
-    </section>
-  )
-}
-
-export default transition(Login)
+export default Login;

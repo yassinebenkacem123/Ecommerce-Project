@@ -8,14 +8,18 @@ import ShownCreativity from '../components/sections/shownCreativity/ShownCreativ
 import Subscribe from '../components/sections/subscribe/Subscribe';
 const Home = ():JSX.Element => {
   return (
-    <> 
-      <HeroSection  />  
-      <AboutUs  />
-      <OurAmazingCameras  />
+    <>
+      <main className='px-12 md:px-15 lg:px-18'> 
+        <HeroSection  />  
+        <AboutUs  />
+        <OurAmazingCameras  />
+      </main>
       <ExploreSection />
-      <ProductDetails />
-      <ShownCreativity  />
-      <Subscribe  />
+      <main> 
+        <ProductDetails />
+        <ShownCreativity  />
+        <Subscribe  />
+      </main>
     </>
   )
 }

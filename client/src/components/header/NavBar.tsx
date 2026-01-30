@@ -7,7 +7,7 @@ import { useState, type JSX } from "react";
 import { IoSearch } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import MenuContent from "./menu/MenuContent";
+import Menu from "./menu/Menu";
 const NavBar = (): JSX.Element => {
   const [openSearch, setOpenSearch] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -15,13 +15,17 @@ const NavBar = (): JSX.Element => {
 
   return (
     <>
-      {openMenu && 
-      <MenuContent
-        setOpenMenu={setOpenMenu}
-        />}
+      <AnimatePresence>
+        {openMenu && (
+          <Menu
+            isMenuOpen={openMenu}
+            setOpenMenu={setOpenMenu}
+          />
+        )}
+      </AnimatePresence>
       <nav className="flex border-b-2  border-stone-200 justify-between items-center py-6">
         <div className="flex items-center gap-5">
-          <OpenMenuButton 
+          <OpenMenuButton
             setOpenMenu={setOpenMenu}
           />
           <Search setOpenSearch={setOpenSearch} />

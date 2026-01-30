@@ -1,41 +1,65 @@
 @import "tailwindcss";
 
+
+
 .bg-color {
     @apply bg-yellow-50/70
 }
 
-.color-primary{
+.color-primary {
     @apply text-stone-800
 }
 
-.color-secondary{
+.color-secondary {
     @apply text-stone-700
 }
 
-.title-font{
+.title-font {
     @apply text-[7rem] text-stone-800 font-semibold
-
 }
 
-.text-font{
+.text-font {
     @apply text-stone-600 text-2xl
 }
-.slide-in{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100vh;
-    background-color:rgb(255, 122, 14);
+
+.slide-in {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(255, 122, 14);
     transform-origin: bottom;
 }
 
-.slide-out{
+.slide-out {
     position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100vh;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
     background-color: #fff;
     transform-origin: top;
+}
+
+@layer components {
+    .image {
+        -webkit-mask-image: url('/src/assets/o.png');
+        -webkit-mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-image: url('/src/assets/o.png');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        height: 100%;
+
+    }
+    .text-stroke{
+        -webkit-text-fill-color: transparent;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: white;
+    }
+
+    .perspective {
+        perspective: 2200px;
+    }
 }

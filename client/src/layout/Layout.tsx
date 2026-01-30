@@ -6,7 +6,7 @@ const Layout = () => {
   const location = useLocation();
   return (
     <div className='flex flex-col gap-10 bg-color'>
-      <main className=" px-12 md:px-15 lg:px-18">
+      <main className="overflow-x-hidden">
           {location.pathname !== '/login' && location.pathname !== '/register' &&
             <NavBar/>}
           <Outlet />
