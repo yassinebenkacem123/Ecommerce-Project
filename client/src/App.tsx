@@ -4,6 +4,7 @@ import Home from "./pages/Home"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
 import {AnimatePresence} from "framer-motion"
+import Products from "./pages/product/Products"
 function App() {
 
   return (
@@ -11,6 +12,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout  />}>
         <Route index element={<Home />}/>
+        <Route path="products" element={<Products />}/>
         <Route path="login" element={<Login />}/>
         <Route path="register" element={<Register />}/>
         <Route path="*" element={<div>404 Not Found</div>}/>

@@ -3,7 +3,7 @@ import type { CameraInfo } from "./type";
 export const CAMERA_DATA: CameraInfo[] = [
     {
         name: "Canon EOS R5",
-        imageUrl: "/cameras/canon-eos-r5.jpg",
+        imageUrl: "/detailsPictures/canon.png",
         price: 3899,
         totalRatings: 1245
     },

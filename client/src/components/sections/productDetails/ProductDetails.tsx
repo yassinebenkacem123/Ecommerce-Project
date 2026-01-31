@@ -2,7 +2,7 @@ import { MdPlayArrow } from "react-icons/md";
 
 const ProductDetails = () => {
   return (
-    <section className='py-10 flex gap-10 flex-col items-center'>
+    <section className='py-10  mt-200 min-h-screen flex gap-10 flex-col items-center'>
       <h1 className='title-font flex flex-col'>
         Our Porduct <br/>
         <div className="flex gap-10 items-center">

@@ -1,7 +1,13 @@
 import { FaStar } from "react-icons/fa6"
 import type { JSX } from "react";
 import RevealText from "../../utils/RevealText";
-const RightPart = (): JSX.Element => {
+const RightPart = ({currentIndex}:{currentIndex: number}): JSX.Element => {
+    const videos:string[] =[
+    "/videos/video1.mp4",
+    "/videos/video2.mp4",
+    "/videos/video3.mp4"
+  ]
+  console.log("Current Index in RightPart:", currentIndex);
   return (
     <div className='w-[30%] flex flex-col  gap-5 justify-center px-5'>
       {/* top one */}
@@ -25,7 +31,7 @@ const RightPart = (): JSX.Element => {
               loop
               muted
               playsInline
-              src="/videos/main-video.mp4"
+              src={videos[currentIndex]}
             />
       </div>
     </div>

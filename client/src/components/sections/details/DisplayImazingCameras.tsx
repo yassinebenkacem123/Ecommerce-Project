@@ -1,20 +1,57 @@
 import { CAMERA_DATA } from "../../../lib/staticData"
-import type { JSX } from "react"
+import { useState, type JSX } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 import type { CameraInfo } from "../../../lib/type"
 import CameraCard from "./CameraCard"
+import CamerDetailsCard from "./CamerDetailsCard"
 const DisplayImazingCameras = (): JSX.Element => {
-  return (
-    <div className="w-full mt-5 flex flex-col gap-10">
-        {
-            CAMERA_DATA.map((camera: CameraInfo)=>(
-                <CameraCard 
-                    key={camera.name} 
-                    camera={camera} 
-                />
-            ))
-        }
-    </div>
-  )
+    const [openCameraIndex, setOpenCameraIndex] = useState<number | null>(null);
+    return (
+        <div className="w-full mt-5 flex flex-col gap-10">
+            {
+                CAMERA_DATA.map((camera: CameraInfo, index: number) => (
+                    <motion.div
+                        layout
+                        transition={{ layout: { duration: 0.4, type: "spring", bounce: 0.2 } }}
+                        key={camera.name}
+                    >
+                        <AnimatePresence mode="wait">
+                            {
+                                openCameraIndex !== index ? (
+                                    <motion.div
+                                        key="collapsed"
+                                        initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <CameraCard
+                                            index={index}
+                                            camera={camera}
+                                            setOpenCameraIndex={setOpenCameraIndex}
+                                        />
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="expanded"
+                                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                                        transition={{ duration: 0.4, ease: "circOut" }}
+                                    >
+                                        <CamerDetailsCard
+                                            setOpenCameraIndex={setOpenCameraIndex}
+                                            camera={camera}
+                                        />
+                                    </motion.div>
+                                )}
+                        </AnimatePresence>
+                    </motion.div>
+
+                ))
+            }
+        </div>
+    )
 }
 
 export default DisplayImazingCameras

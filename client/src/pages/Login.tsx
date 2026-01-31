@@ -1,4 +1,4 @@
-import Template from "../utils/template";
+import Template from "../utils/Template";
 
 const Login = () => {
   return (

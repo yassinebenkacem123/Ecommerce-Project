@@ -1,9 +1,11 @@
 import { useLayoutEffect, useRef, type JSX } from "react"
-import bg from '/exploreSection/image-1.jpg'
-import img1 from '/exploreSection/image-2.jpg'
-import img2 from '/exploreSection/image-3.jpg'
-import img3 from '/exploreSection/image-1.jpg'
 
+import bg from '/exploreSection/bg.jpg'
+
+import img1 from '/exploreSection/image-1.jpg'
+import img2 from '/exploreSection/image-2.jpg'
+import img3 from '/exploreSection/image-3.jpg'
+import img4 from '/exploreSection/image-4.jpg'
 import gsap from "gsap"
 import ScrollTrigger from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger);
@@ -11,6 +13,9 @@ const ExploreSection = (): JSX.Element => {
   const bg1 = useRef<HTMLDivElement>(null);
   const image_container = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
+  const text1 = useRef<HTMLHeadingElement>(null);
+  const text2 = useRef<HTMLParagraphElement>(null);
+  const container = useRef<HTMLDivElement>(null) ;
   useLayoutEffect(()=>{
     let ctx = gsap.context(()=>{
         ScrollTrigger.create({
@@ -22,6 +27,11 @@ const ExploreSection = (): JSX.Element => {
           endTrigger:".last"
         })
     });
+
+    if (container.current) {
+      const height = container.current.offsetHeight;
+      gsap.set(container.current, { marginTop: -height });
+    }
     gsap.timeline({
       scrollTrigger:{
         trigger:image_container.current,
@@ -34,11 +44,17 @@ const ExploreSection = (): JSX.Element => {
       {
         transform:"translateZ(2200px)"
       })
+      .to(text1.current, 0.05, {y:-800}, "<")
+      .to(text2.current, 0.08, {y:-800}, "<")
+      .fromTo(container.current, 
+        {yPercent:100, scaleY:2}
+        ,{yPercent:0, scaleY:1}
+      );
     return () => ctx.revert();
   },[])
   return (
    <>
-      <div className="relative">
+      <div className="relative min-h-screen mb-85 mt-20">
         <div ref={bg1} className="bg bg-[#141414] absolute min-h-screen w-screen"></div>
         <section>
           <div ref={image_container} 
@@ -49,22 +65,26 @@ const ExploreSection = (): JSX.Element => {
             src={bg} alt=""/>
             <div className="text-white absolute flex flex-col items-center justify-center">
               <h1
-                ref={text1} 
+                ref={text1}
                 className="text-[170px]">
                 <span className="text-stroke">
                   Outllook 
                 </span> Above
               </h1>
-              <p className="opacity-50 w-48 text-[13px] text-center">
+              <p
+                ref={text2} 
+                className="opacity-50 w-48 text-[13px] text-center">
                 {" "}
                 A showe case of the world's best aerial photography</p>
             </div>
           </div>
-          <div className="container flex items-center justify-around flex-wrap">
+          <div  
+          ref={container}
+          className="container flex items-center justify-around flex-wrap">
             
             <div className="col-1 translate-y-[30%] pb-8 flex flex-col gap-15">
               <img
-                className="w-112.5 h-87.5 " 
+                className="w-112.5 h-100 " 
                 src={img1} alt="" />
               <img
                 className="w-100 h-100" 
@@ -73,8 +93,8 @@ const ExploreSection = (): JSX.Element => {
 
 
             <div className="col-2 flex flex-col z-14 gap-15 ">
-              <img src={img2} alt="" className="w-150 h-100" />
-              <img src={img3} alt="" className="w-100 h-100 last"/>
+              <img src={img3} alt="" className="w-150 h-100" />
+              <img src={img4} alt="" className="w-110 h-145 last"/>
             </div>
 
           </div>

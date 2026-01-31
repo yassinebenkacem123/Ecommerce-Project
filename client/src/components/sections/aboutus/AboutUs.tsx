@@ -24,16 +24,13 @@ const AboutUs = ():JSX.Element => {
             </div>
         </div>
 
-        {/* Bottom part */}
         <div className='flex justify-between gap-4 items-center'>
-            {/* <Reveal width="30%"> */}
                <div className="rounded-full  relative p-">
                 <div className="rounded-full top-2 left-20 relative bg-gray-400/20 text-stone-800 p-7">
                     <GiStarShuriken size={30}/>
                 </div>
                 <div className="w-40 absolute rotate-210 h-20 bg-orange-500 rounded-t-full"/>
             </div>
-            {/* </Reveal> */}
             <div className="bg-amber-300  flex relative items-center justify-center w-[70%] h-80">
                 <img
                     className="w-75 bottom-0 absolute"

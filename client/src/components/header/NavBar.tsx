@@ -23,7 +23,7 @@ const NavBar = (): JSX.Element => {
           />
         )}
       </AnimatePresence>
-      <nav className="flex border-b-2  border-stone-200 justify-between items-center py-6">
+      <nav className="flex border-b-2 ml-15 mr-15 border-stone-200 justify-between items-center py-6">
         <div className="flex items-center gap-5">
           <OpenMenuButton
             setOpenMenu={setOpenMenu}
@@ -40,6 +40,7 @@ const NavBar = (): JSX.Element => {
         <div className="flex gap-4 items-center justify-center">
           {/* products  */}
           <button
+            onClick={() => navigate("/products")}
             title="products"
             className="border cursor-pointer hover:bg-stone-100/70 border-stone-800 rounded-full p-3">
             <FaStore size={25} />
@@ -68,7 +69,7 @@ const NavBar = (): JSX.Element => {
           animate={{ opacity: 1, height: "3.2rem" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.25 }}
-          className="h-13 border-r border-l border-stone-300 border-b flex items-center px-5 bg-white/50 w-full">
+          className="h-13 border-r border-l  border-stone-300 border-b flex items-center px-5 bg-white/50  mr-15  ml-15">
           <IoSearch size={20} className="text-stone-800 mr-3" />
           <input
 
