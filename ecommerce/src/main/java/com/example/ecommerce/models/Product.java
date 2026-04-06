@@ -1,20 +1,13 @@
 package com.example.ecommerce.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.ecommerce.config.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,9 +40,9 @@ public class Product {
     private Double price;
     private Double specialPrice;
     private Double discount;
-//    @Min(value = 0, message = "Rating cannot be negative")
-//    @Max(value = 5, message = "Rating cannot be greater than 5")
-//    private double rating;
+    @Min(value = 0, message = "Rating cannot be negative")
+    @Max(value = 5, message = "Rating cannot be greater than 5")
+    private double rating;
 
 
 
@@ -83,6 +76,11 @@ public class Product {
 
     )
     private List<ProductImage> productImages = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
+
+    private Date createdAt;
 
 
 }

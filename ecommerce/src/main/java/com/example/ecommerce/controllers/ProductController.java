@@ -157,6 +157,38 @@ public class ProductController {
         return productService.updateProductImageService(productId, image) ;
     }
 
+
+    // getting the data of products needed for building the dashboard :
+    @GetMapping("/admin/dashboardProducts")
+    public ResponseEntity<?> getDashboardProducts(
+            @RequestParam(
+                    name = "keyword",
+                    required = false
+            ) String keyword,
+            @RequestParam(
+                    name = "pageSize",
+                    required = false,
+                    defaultValue = AppConstants.PAGE_SIZE
+            ) Integer pageSize,
+            @RequestParam(
+                    name="pageNumber",
+                    required = false,
+                    defaultValue = AppConstants.PAGE_NUMBER
+            ) Integer pageNumber,
+            @RequestParam(
+                    name = "sortBy",
+                    required = false,
+                    defaultValue = "productId"
+            ) String  sortBy,
+            @RequestParam(
+                    name = "sortOrder",
+                    required = false,
+                    defaultValue = AppConstants.SORT_DIR
+            ) String sortOrder
+
+    ){
+        return productService.getDashboardProducts(keyword, pageSize, pageNumber, sortBy, sortOrder);
+    }
     
 }
 

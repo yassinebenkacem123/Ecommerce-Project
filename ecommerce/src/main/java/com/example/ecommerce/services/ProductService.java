@@ -49,6 +49,12 @@ public interface ProductService {
 
     public ResponseEntity<APIResponse> updateProductImageService(Long productId, MultipartFile image)throws IOException;
 
-    
 
+    ResponseEntity<?> getDashboardProducts(
+            String keyword,
+            Integer pageSize,
+            Integer pageNumber,
+            String sortBy,
+            String sortOrder
+    );
 }
