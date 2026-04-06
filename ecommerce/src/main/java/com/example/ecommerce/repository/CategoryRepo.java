@@ -17,7 +17,7 @@ public interface CategoryRepo extends JpaRepository<Category,Long>{
             c.categoryId,
             c.categoryName,
             COUNT(DISTINCT p.productId),
-            AVG(p.discount),
+            AVG(p.rating),
             COUNT(DISTINCT w.orderItemId)
         )
         FROM Category c

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.ecommerce.payload.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,10 +23,6 @@ import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Cart;
 import com.example.ecommerce.models.Category;
 import com.example.ecommerce.models.Product;
-import com.example.ecommerce.payload.APIResponse;
-import com.example.ecommerce.payload.CartDTO;
-import com.example.ecommerce.payload.ProductDTO;
-import com.example.ecommerce.payload.ProductResponse;
 import com.example.ecommerce.repository.CartRepo;
 import com.example.ecommerce.repository.CategoryRepo;
 import com.example.ecommerce.repository.ProductRepo;
@@ -280,4 +277,59 @@ public class ProductServiceImplt implements ProductService {
         return imageBaseUrl.endsWith("/") ? imageBaseUrl + imageName : imageBaseUrl + "/" + imageName;
     }
 
+    @Override
+    public ResponseEntity<AdminProductsDashboardResponse> getDashboardProducts(
+            String keyword,
+            Integer pageSize,
+            Integer pageNumber,
+            String sortBy,
+            String sortOrder
+    ) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Specification<Product> spec = (root, query, cb) -> cb.conjunction();
+        if (keyword != null && !keyword.isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder
+                    .like(criteriaBuilder.lower(root.get("productName")), "%" + keyword.toLowerCase() + "%"));
+        }
+
+        Page<Product> productPage = productRepo.findAll(spec, pageDetails);
+
+        List<Product> products = productPage.getContent();
+
+        List<AdminProductsDashboardDTO> adminProductsDashboardDTOS = products.stream().map(product -> {
+            AdminProductsDashboardDTO adminProductsDashboardDTO = new AdminProductsDashboardDTO();
+            adminProductsDashboardDTO.setProductName(product.getProductName());
+            adminProductsDashboardDTO.setProductCategory(product.getCategory().getCategoryName());
+            adminProductsDashboardDTO.setProductPrice(product.getPrice());
+            adminProductsDashboardDTO.setProductQuantity(product.getQuantity());
+            adminProductsDashboardDTO.setProductImage(constructImageBaseUrl(product.getProductMainImage()));
+            adminProductsDashboardDTO.setProductRating(product.getRating());
+            adminProductsDashboardDTO.setProductCreatedDate(product.getCreatedAt());
+            adminProductsDashboardDTO.setProductStatus(product.getProductStatus());
+            adminProductsDashboardDTO.setDiscount(product.getDiscount());
+            adminProductsDashboardDTO.setSubSellerInfo(
+                    new SubSellerInfo(
+                            product.getSellerProfile().getSellerId(),
+                            product.getSellerProfile().getUser().getUsername()
+                    )
+            );
+            return adminProductsDashboardDTO;
+        }).toList();
+
+        AdminProductsDashboardResponse adminProductsDashboardResponse = new AdminProductsDashboardResponse();
+        adminProductsDashboardResponse.setContent(adminProductsDashboardDTOS);
+        adminProductsDashboardResponse.setPageNumber(productPage.getNumber());
+        adminProductsDashboardResponse.setPageSize(productPage.getSize());
+        adminProductsDashboardResponse.setTotalElements(productPage.getTotalElements());
+        adminProductsDashboardResponse.setTotalPages(productPage.getTotalPages());
+        adminProductsDashboardResponse.setTheLast(productPage.isLast());
+
+
+        return new ResponseEntity<>(adminProductsDashboardResponse, HttpStatus.OK);
+
+    }
 }
